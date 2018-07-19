@@ -1,28 +1,45 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <renderer :running="running">
+      <layer>
+        Hello, world
+      </layer>
+    </renderer>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import Layer from './components/Layer.vue'
+import Renderer from './components/Renderer.vue'
 
 export default {
   name: 'app',
+
   components: {
-    HelloWorld
+    Layer,
+    Renderer
+  },
+
+  data () {
+    return {
+      running: true
+    }
   }
 }
 </script>
 
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+<style lang="sass">
+  #app,
+  html,
+  body
+    width: 100%
+    height: 100vh
+    margin: 0
+    padding: 0
+    overflow: hidden
+
+  body
+    color: #1D2B53
+    background: #7E2553
+    //background: #FF004D
 </style>
