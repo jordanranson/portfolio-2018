@@ -1,7 +1,27 @@
 <template>
   <div id="app">
     <renderer :running="running">
-      <layer>
+      <layer padding="10" height="100%">
+        <layer background="blue" padding="10" height="auto">
+          <layer flow="horizontal">
+            <layer background="yellow" width="50%"></layer>
+            <layer background="magenta" width="50%"></layer>
+          </layer>
+          <layer height="auto" padding="16 0">
+            <layer background="red"></layer>
+            <layer background="lime"></layer>
+          </layer>
+          <layer background="green" :right="0" :bottom="0" position="absolute" width="48" height="48">
+            <layer flow="horizontal" padding="24 4 4 4" height="auto">
+              <layer background="yellow" width="50%" height="auto"></layer>
+              <layer background="magenta" width="50%" height="auto"></layer>
+              <layer background="black" position="absolute" width="10" height="10">
+              </layer>
+            </layer>
+          </layer>
+        </layer>
+      </layer>
+      <layer background="#1D2B53" height="100%">
         Hello, world
       </layer>
     </renderer>

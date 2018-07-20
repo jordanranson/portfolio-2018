@@ -1,6 +1,6 @@
 <template>
   <div class="renderer">
-    <canvas ref="canvas" width="384" height="216"></canvas>
+    <canvas ref="canvas" :width="width" :height="height"></canvas>
     <slot />
   </div>
 </template>
@@ -23,14 +23,21 @@ export default {
 
   data () {
     return {
+      width: 384,
+      height: 216,
+      screen: { x: 0, y: 0, width: 384, height: 432 },
       context: undefined,
       observer: undefined,
-      runHandler: undefined
+      runHandler: undefined,
+      scrollHandler: undefined
     }
   },
 
   created () {
     this.runHandler = this.run.bind(this)
+    this.scrollHandler = this.scroll.bind(this)
+
+    document.body.addEventListener('wheel', this.scrollHandler)
   },
 
   mounted () {
@@ -47,7 +54,8 @@ export default {
   },
 
   beforeDestroy () {
-    this.observer.disconnect()
+    // this.observer.disconnect()
+    document.body.removeEventListener('wheel', this.scrollHandler)
   },
 
   methods: {
@@ -63,17 +71,28 @@ export default {
     },
 
     draw () {
-      const { context } = this
-      const { width, height } = this.$refs.canvas
+      const { context, screen } = this
 
       context.fillStyle = this.clearColour
-      context.fillRect(0, 0, width, height)
+      context.fillRect(0, 0, this.$refs.canvas.width, this.$refs.canvas.height)
+
+      let height = 0
 
       this.$slots.default && this.$slots.default.forEach(vnode => {
-        if (vnode.componentInstance && vnode.componentInstance.draw) {
-          vnode.componentInstance.draw(context)
+        const component = (vnode.componentInstance && vnode.componentInstance.draw)
+          ? vnode.componentInstance
+          : undefined
+
+        if (component) {
+          const { top, left } = component
+          context.drawImage(component.draw(), Math.round(left+screen.x), Math.round(top+screen.y+height))
+          height += (component.size && component.size.height) || 0
         }
       })
+    },
+
+    scroll (evt) {
+      this.screen.y -= evt.deltaY / 10
     }
   },
 
@@ -94,6 +113,9 @@ export default {
     display: flex
     align-items: center
     justify-content: center
+    div
+      position: absolute
+      transform: translate(-1000vw, -1000vh)
 
   canvas
     width: 100%
