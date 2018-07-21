@@ -121,6 +121,7 @@ export default {
 
   canvas
     width: 100%
+    // width: 720px
     background: #FF004D
     image-rendering: pixelated
 </style>

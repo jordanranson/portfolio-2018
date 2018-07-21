@@ -1,27 +1,29 @@
 <template>
   <div id="app">
     <renderer :running="running">
-      <layer padding="10" height="100%">
-        <!-- <layer background="blue" padding="10" height="auto">
-          <layer flow="horizontal">
-            <layer background="yellow" width="50%"></layer>
-            <layer background="magenta" width="50%"></layer>
-          </layer>
-          <layer height="auto" padding="16 0">
-            <layer background="red"></layer>
-            <layer background="lime"></layer>
-          </layer>
-          <layer background="green" :right="0" :bottom="0" position="absolute" width="48" height="48">
-            <layer flow="horizontal" padding="24 4 4 4" height="auto">
-              <layer background="yellow" width="50%" height="auto"></layer>
-              <layer background="magenta" width="50%" height="auto"></layer>
-              <layer background="black" position="absolute" width="10" height="10">
-              </layer>
-            </layer>
-          </layer>
-        </layer> -->
+
+      <!-- Hero -->
+      <layer height="100%" padding="15" :background="colours.RED">
+        <layer height="50%">
+          <graphic-text :font="fonts.Superstar" :colour="colours.DARK_BLUE">
+            JORDAN RANSON
+          </graphic-text>
+          <graphic-text :font="fonts.EightBitFortress" :colour="colours.DARK_BLUE">
+            UI . Designer . Developer
+          </graphic-text>
+        </layer>
+        <layer :height="7" :bottom="0" position="absolute" flow="horizontal">
+          <graphic-text :font="fonts.EightBitFortress" :colour="colours.DARK_BLUE">UI</graphic-text>
+          <graphic-text :font="fonts.EightBitFortress" :colour="colours.DARK_BLUE" :left="10">Games</graphic-text>
+          <graphic-text :font="fonts.EightBitFortress" :colour="colours.DARK_BLUE" :left="20">Design</graphic-text>
+          <graphic-text :font="fonts.EightBitFortress" :colour="colours.DARK_BLUE" :left="30">Projects</graphic-text>
+        </layer>
+        <layer :width="(9+5)*3" :height="9" :bottom="0" :right="0" position="absolute" flow="horizontal" :background="colours.DARK_BLUE">
+        </layer>
       </layer>
-      <layer :background="colours.DARK_BLUE" height="100%" padding="15">
+
+      <!-- Strap 1 -->
+      <layer height="100%" padding="15" :background="colours.DARK_BLUE">
         <graphic-text :font="fonts.Superstar" :colour="colours.WHITE">
           {{ "Hello, world." | toUpperCase }}
         </graphic-text>
@@ -31,6 +33,7 @@
           Foo, bar, baz.
         </graphic-text>
       </layer>
+
     </renderer>
   </div>
 </template>
