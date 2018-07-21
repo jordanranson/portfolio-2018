@@ -71,10 +71,12 @@ export default {
     },
 
     draw () {
-      const { context, screen } = this
+      const { canvas } = this.$refs
+      if (!canvas) return
 
+      const { context, screen } = this
       context.fillStyle = this.clearColour
-      context.fillRect(0, 0, this.$refs.canvas.width, this.$refs.canvas.height)
+      context.fillRect(0, 0, canvas.width, canvas.height)
 
       let height = 0
 

@@ -2,7 +2,7 @@
   <div id="app">
     <renderer :running="running">
       <layer padding="10" height="100%">
-        <layer background="blue" padding="10" height="auto">
+        <!-- <layer background="blue" padding="10" height="auto">
           <layer flow="horizontal">
             <layer background="yellow" width="50%"></layer>
             <layer background="magenta" width="50%"></layer>
@@ -19,12 +19,16 @@
               </layer>
             </layer>
           </layer>
-        </layer>
+        </layer> -->
       </layer>
-      <layer background="#1D2B53" height="100%">
-        <graphic-text :font="font" colour="magenta" :top="10" :left="10">
-          Hello,
-          world.
+      <layer :background="colours.DARK_BLUE" height="100%" padding="15">
+        <graphic-text :font="fonts.Superstar" :colour="colours.WHITE">
+          {{ "Hello, world." | toUpperCase }}
+        </graphic-text>
+        <graphic-text :font="fonts.EightBitFortress" :colour="colours.WHITE" padding="10 0 0 0">
+          Hello, world.
+          Lorem ipsum dolor sit amet.
+          Foo, bar, baz.
         </graphic-text>
       </layer>
     </renderer>
@@ -33,8 +37,12 @@
 
 <script>
 import Layer from './components/Layer.vue'
+import Colours from './constants/colours.js'
 import Renderer from './components/Renderer.vue'
 import GraphicText from './components/GraphicText.vue'
+
+// Fonts
+import Superstar from './fonts/Superstar.js'
 import EightBitFortress from './fonts/EightBitFortress.js'
 
 console.log(EightBitFortress)
@@ -50,8 +58,23 @@ export default {
 
   data () {
     return {
-      font: EightBitFortress,
+      fonts: {
+        Superstar,
+        EightBitFortress
+      },
       running: true
+    }
+  },
+
+  computed: {
+    colours () {
+      return Colours
+    }
+  },
+
+  filters: {
+    toUpperCase (str) {
+      return str.toUpperCase()
     }
   }
 }

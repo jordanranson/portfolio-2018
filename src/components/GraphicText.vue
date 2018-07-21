@@ -39,7 +39,39 @@ export default {
   data () {
     return {
       text: this.getText(),
-      fontBuffer: undefined
+      fontBuffer: undefined,
+      needsResize: true,
+    }
+  },
+
+  computed: {
+    size () {
+      const { font, paddingSize } = this
+
+      let left = 0
+      let width = paddingSize.left || 1
+      let height = (paddingSize.top + (font.rowHeight + this.lineSpacing)) || 1
+
+      this.text.split('').forEach((char, i) => {
+        if (char === ' ' && left !== 0) {
+          left += this.wordSpacing
+          return
+        }
+
+        if (char === String.fromCharCode(10)) {
+          height += font.rowHeight + this.lineSpacing
+          left = 0
+          return
+        }
+
+        const charData = font.fontData[char]
+        if (!charData) return
+
+        left += charData.width + this.letterSpacing
+        if (left > width) width = left
+      })
+
+      return { width, height }
     }
   },
 
@@ -85,7 +117,12 @@ export default {
     },
 
     draw () {
-      const { context, font, fontBuffer } = this
+      const {
+        font,
+        context,
+        fontBuffer,
+        paddingSize
+      } = this
 
       if (!fontBuffer && font.ready) {
         this.drawBuffer(this.colour)
@@ -94,8 +131,8 @@ export default {
       this.clear()
 
       if (fontBuffer) {
-        let top = 0
-        let left = 0
+        let top = paddingSize.top
+        let left = paddingSize.left
 
         this.text.split('').forEach((char, i) => {
           if (char === ' ' && left !== 0) {
@@ -105,7 +142,7 @@ export default {
 
           if (char === String.fromCharCode(10)) {
             top += font.rowHeight + this.lineSpacing
-            left = 0
+            left = paddingSize.left
             return
           }
 
