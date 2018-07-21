@@ -22,7 +22,10 @@
         </layer>
       </layer>
       <layer background="#1D2B53" height="100%">
-        Hello, world
+        <graphic-text :font="font" colour="magenta" :top="10" :left="10">
+          Hello,
+          world.
+        </graphic-text>
       </layer>
     </renderer>
   </div>
@@ -31,17 +34,23 @@
 <script>
 import Layer from './components/Layer.vue'
 import Renderer from './components/Renderer.vue'
+import GraphicText from './components/GraphicText.vue'
+import EightBitFortress from './fonts/EightBitFortress.js'
+
+console.log(EightBitFortress)
 
 export default {
   name: 'app',
 
   components: {
     Layer,
-    Renderer
+    Renderer,
+    GraphicText
   },
 
   data () {
     return {
+      font: EightBitFortress,
       running: true
     }
   }
