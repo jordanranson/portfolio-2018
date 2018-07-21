@@ -9,8 +9,6 @@ import graphic from '@/mixins/graphic.js'
 export default {
   name: 'GraphicText',
 
-  abstract: true,
-
   mixins: [ graphic ],
 
   props: {
