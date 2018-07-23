@@ -166,7 +166,7 @@ export default {
       this.context.fillRect(0, 0, size.width, size.height)
     },
 
-    draw () {
+    draw (ofsx, ofsy) {
       const { context, left, top, size, paddingSize: padding } = this
 
       if (this.shouldClear) this.clear()
@@ -180,8 +180,6 @@ export default {
           : undefined
 
         if (component) {
-          const canvas = component.draw()
-
           if (component.position === 'absolute') {
             let drawx = 0
             if (component.right !== undefined) {
@@ -211,10 +209,12 @@ export default {
                 + component.top
             }
 
+            const canvas = component.draw(drawx+ofsx, drawy+ofsy)
             context.drawImage(canvas, drawx, drawy)
           } else {
             const drawx = left + padding.left + component.left + width
             const drawy = top + padding.top + component.top + height
+            const canvas = component.draw(drawx+ofsx, drawy+ofsy)
             context.drawImage(canvas, drawx, drawy)
 
             if (this.flow === 'vertical') {

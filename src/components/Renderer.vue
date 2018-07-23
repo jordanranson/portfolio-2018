@@ -1,6 +1,6 @@
 <template>
-  <div class="renderer">
-    <canvas ref="canvas" :width="width" :height="height"></canvas>
+  <div class="renderer" :style="{ cursor }">
+    <canvas ref="canvas" :width="width" :height="height" @mousemove="mousemove" @click="click"></canvas>
     <slot />
   </div>
 </template>
@@ -8,6 +8,12 @@
 <script>
 export default {
   name: 'Renderer',
+
+  provide () {
+    return {
+      state: this.$data
+    }
+  },
 
   props: {
     running: {
@@ -25,10 +31,13 @@ export default {
     return {
       width: 384,
       height: 216,
+      cursor: 'default',
       screen: { x: 0, y: 0, width: 384, height: 432 },
       context: undefined,
       observer: undefined,
+      cursorPos: { x: 0, y: 0 },
       runHandler: undefined,
+      cursorTapped: false,
       scrollHandler: undefined
     }
   },
@@ -61,16 +70,13 @@ export default {
   methods: {
     run () {
       if (!this.running) return
-      this.update()
       this.draw()
       requestAnimationFrame(this.runHandler)
     },
 
-    update () {
-
-    },
-
     draw () {
+      this.cursor = 'default'
+
       const { canvas } = this.$refs
       if (!canvas) return
 
@@ -87,14 +93,32 @@ export default {
 
         if (component) {
           const { top, left } = component
-          context.drawImage(component.draw(), Math.round(left+screen.x), Math.round(top+screen.y+height))
+          const x = Math.round(left+screen.x)
+          const y = Math.round(top+screen.y+height)
+          context.drawImage(component.draw(x, y), x, y)
           height += (component.size && component.size.height) || 0
         }
       })
     },
 
+    // Event handlers
+
     scroll (evt) {
       this.screen.y -= evt.deltaY / 10
+    },
+
+    click (evt) {
+      this.cursorTapped = true
+    },
+
+    mousemove (evt) {
+      const { canvas } = this.$refs
+
+      const brect = canvas.getBoundingClientRect()
+      const scale = brect.width / 384
+
+      this.cursorPos.x = Math.round((evt.clientX - canvas.offsetLeft) / scale)
+      this.cursorPos.y = Math.round((evt.clientY - canvas.offsetTop) / scale)
     }
   },
 
@@ -113,6 +137,7 @@ export default {
     width: 100%
     height: 100%
     display: flex
+    position: relative
     align-items: center
     justify-content: center
     div
